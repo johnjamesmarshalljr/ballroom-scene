@@ -6,74 +6,68 @@ function HousesPage({ onBack }) {
       id: 1,
       name: "House of Eleganza",
       leaders: ["Shayla", "Marco"],
-      upcomingEvents: ["Practice - April 10", "Showcase - May 2"],
+      upcomingEvents: ["Practice – April 10", "Showcase – May 2"],
+      announcements: ["New member spotlight!", "Category update next ball"],
       members: ["Dee", "Zara", "Alex"],
     },
     {
       id: 2,
       name: "House of Xcellence",
-      leaders: ["Ava"],
-      upcomingEvents: ["Practice - April 12"],
+      leaders: ["Ava", "Leo"],
+      upcomingEvents: ["Runway Rehearsal – April 12"],
+      announcements: ["Theme reveal tomorrow!"],
       members: ["Trey", "Mina", "Sky"],
     },
   ]);
-
-  const [selectedHouse, setSelectedHouse] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-4xl mx-auto py-6">
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">
-          {selectedHouse ? selectedHouse.name : "Houses"}
+        <h1 className="text-3xl font-bold">
+          {selected ? selected.name : "Houses"}
         </h1>
         <button
-          className="text-blue-600 hover:underline text-sm"
-          onClick={() => (selectedHouse ? setSelectedHouse(null) : onBack())}
+          className="text-sm text-primary hover:text-accent"
+          onClick={() => (selected ? setSelected(null) : onBack())}
         >
-          ← {selectedHouse ? "All Houses" : "Back"}
+          ← {selected ? "All Houses" : "Back"}
         </button>
       </div>
 
-      {!selectedHouse ? (
-        <div className="space-y-4">
-          {houses.map((house) => (
+      {!selected ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {houses.map((h) => (
             <div
-              key={house.id}
-              className="bg-white p-4 rounded shadow cursor-pointer hover:bg-gray-100"
-              onClick={() => setSelectedHouse(house)}
+              key={h.id}
+              className="bg-white p-6 rounded-lg shadow hover:shadow-md cursor-pointer transition"
+              onClick={() => setSelected(h)}
             >
-              <h2 className="text-lg font-semibold">{house.name}</h2>
+              <h2 className="text-xl font-semibold">{h.name}</h2>
             </div>
           ))}
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="font-semibold mb-2">Leaders</h3>
-            <ul className="list-disc ml-5 text-sm">
-              {selectedHouse.leaders.map((leader, idx) => (
-                <li key={idx}>{leader}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="font-semibold mb-2">Upcoming Events</h3>
-            <ul className="list-disc ml-5 text-sm">
-              {selectedHouse.upcomingEvents.map((event, idx) => (
-                <li key={idx}>{event}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="font-semibold mb-2">Members</h3>
-            <ul className="list-disc ml-5 text-sm">
-              {selectedHouse.members.map((member, idx) => (
-                <li key={idx}>{member}</li>
-              ))}
-            </ul>
-          </div>
+          {["leaders", "upcomingEvents", "announcements", "members"].map((section) => (
+            <div key={section} className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-2">
+                {section === "leaders"
+                  ? "Leaders"
+                  : section === "upcomingEvents"
+                  ? "Upcoming Events"
+                  : section === "announcements"
+                  ? "Announcements"
+                  : "Members"}
+              </h2>
+              <ul className="list-disc list-inside text-gray-700 space-y-1">
+                {selected[section].map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
     </div>

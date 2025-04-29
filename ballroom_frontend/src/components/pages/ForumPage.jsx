@@ -11,25 +11,30 @@ function ForumPage({ onBack }) {
     },
     {
       id: 2,
-      title: "Music deadline confusion",
+      title: "Music submission deadline confusion",
       author: "Marco",
-      replies: 5,
-      upvotes: 9,
+      replies: 8,
+      upvotes: 7,
     },
     {
       id: 3,
-      title: "Clip library improvements?",
-      author: "Dee",
-      replies: 8,
-      upvotes: 7,
+      title: "Best performances of the year so far",
+      author: "Ava",
+      replies: 5,
+      upvotes: 20,
+    },
+    {
+      id: 4,
+      title: "Who are the rising stars this year?",
+      author: "Leo",
+      replies: 3,
+      upvotes: 10,
     },
   ]);
 
   const handleUpvote = (id) => {
     setThreads((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, upvotes: t.upvotes + 1 } : t
-      )
+      prev.map((t) => (t.id === id ? { ...t, upvotes: t.upvotes + 1 } : t))
     );
   };
 
@@ -42,45 +47,54 @@ function ForumPage({ onBack }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Forum</h1>
+    <div className="max-w-3xl mx-auto py-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Forum</h1>
         <button
-          className="text-blue-600 hover:underline text-sm"
+          className="text-sm text-primary hover:text-accent"
           onClick={onBack}
         >
           ← Back to Home
         </button>
       </div>
 
-      {threads.map((thread) => (
-        <div
-          key={thread.id}
-          className="bg-white p-4 rounded shadow mb-4 flex justify-between items-start"
-        >
-          <div className="flex flex-col">
-            <h2 className="text-md font-semibold">{thread.title}</h2>
-            <p className="text-xs text-gray-500">
-              Posted by {thread.author} • {thread.replies} replies
-            </p>
+      {/* Thread List */}
+      <div className="space-y-4">
+        {threads.map((thread) => (
+          <div
+            key={thread.id}
+            className="bg-white rounded-lg shadow hover:border-accent hover:border transition overflow-hidden"
+          >
+            <div className="flex p-4">
+              {/* Votes */}
+              <div className="flex flex-col items-center mr-4">
+                <button
+                  className="text-gray-500 hover:text-accent"
+                  onClick={() => handleUpvote(thread.id)}
+                >
+                  ▲
+                </button>
+                <span className="text-sm font-medium">{thread.upvotes}</span>
+                <button
+                  className="text-gray-500 hover:text-accent"
+                  onClick={() => handleDownvote(thread.id)}
+                >
+                  ▼
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1">
+                <h2 className="text-lg font-semibold">{thread.title}</h2>
+                <p className="text-xs text-gray-500">
+                  Posted by {thread.author} • {thread.replies} replies
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-center ml-4">
-            <button
-              className="text-gray-600 hover:text-black"
-              onClick={() => handleUpvote(thread.id)}
-            >
-              ▲
-            </button>
-            <p className="text-sm font-medium">{thread.upvotes}</p>
-            <button
-              className="text-gray-600 hover:text-black"
-              onClick={() => handleDownvote(thread.id)}
-            >
-              ▼
-            </button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
