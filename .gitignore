@@ -1,0 +1,13 @@
+# Ignore Rails temp files
+/log/*
+/tmp/*
+/vendor/bundle
+/public/packs
+/node_modules
+yarn-error.log
+.byebug_history
+
+# Ignore React junk
+ballroom_frontend/node_modules/
+ballroom_frontend/dist/
+/ballroom_frontend/.DS_Store
