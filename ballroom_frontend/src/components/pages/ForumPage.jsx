@@ -64,11 +64,11 @@ function ForumPage({ onBack }) {
         {threads.map((thread) => (
           <div
             key={thread.id}
-            className="bg-white rounded-lg shadow hover:border-accent hover:border transition overflow-hidden"
+            className="cursor-pointer bg-white rounded-lg shadow hover:border-accent hover:border transition overflow-hidden"
           >
             <div className="flex p-4">
               {/* Votes */}
-              <div className="flex flex-col items-center mr-4">
+              <div className="cursor-pointer flex flex-col items-center mr-4">
                 <button
                   className="text-gray-500 hover:text-accent"
                   onClick={() => handleUpvote(thread.id)}

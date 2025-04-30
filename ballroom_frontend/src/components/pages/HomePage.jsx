@@ -3,7 +3,7 @@ import React from "react";
 function HomePage({ setView }) {
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">🏁 Welcome to the Ballroom App</h1>
+      <h1 className="text-2xl font-bold mb-4">🏁 Welcome to the Scene</h1>
       <p className="mb-4">This will be the central feed, upcoming balls, and links to other sections.</p>
 
       <div className="space-y-2">

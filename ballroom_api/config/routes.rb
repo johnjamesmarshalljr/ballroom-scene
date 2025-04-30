@@ -1,11 +1,21 @@
 Rails.application.routes.draw do
-  resources :houses
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :forum_threads, path: 'threads' do
+        resources :comments, only: %i[index create]
+      end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+      resources :balls do
+        resources :categories, except: %i[new edit show]
+      end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+    #  other resources (houses, kikipedia entries, users, etc.), will go here:
+      # resources :houses
+      # resources :wiki_entries
+
+    end
+  end
+
+  # Serve React frontend (if using Rails for static hosting):
+  # get '*path', to: 'static#frontend', constraints: ->(req) { !req.xhr? && req.format.html? }
 end

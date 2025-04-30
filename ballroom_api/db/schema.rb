@@ -10,7 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_190147) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_30_211602) do
+  create_table "balls", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.string "location"
+    t.string "theme"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.integer "ball_id", null: false
+    t.string "kind"
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ball_id"], name: "index_categories_on_ball_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "thread_id", null: false
+    t.string "user"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["thread_id"], name: "index_comments_on_thread_id"
+  end
+
+  create_table "forum_threads", force: :cascade do |t|
+    t.string "title"
+    t.string "author"
+    t.integer "upvotes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "houses", force: :cascade do |t|
     t.string "name"
     t.string "leader"
@@ -19,4 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_190147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "categories", "balls"
+  add_foreign_key "comments", "threads"
 end
