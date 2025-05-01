@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_211602) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_01_200312) do
   create_table "balls", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -36,7 +36,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_211602) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thread_id"], name: "index_comments_on_thread_id"
   end
 
   create_table "forum_threads", force: :cascade do |t|
@@ -57,5 +56,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_211602) do
   end
 
   add_foreign_key "categories", "balls"
-  add_foreign_key "comments", "threads"
 end
