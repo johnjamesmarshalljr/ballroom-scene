@@ -47,7 +47,7 @@ module Api
       end
 
       def ball_params
-        params.require(:ball).permit(:name, :date, :location, :theme)
+        params.require(:ball).permit(:name, :date, :location, :theme, :description)
       end
     end
   end
