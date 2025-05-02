@@ -9,6 +9,8 @@ Rails.application.routes.draw do
         resources :categories, except: %i[new edit show]
       end
 
+      resources :categories, only: [:create] # Independent category creation
+
     #  other resources (houses, kikipedia entries, users, etc.), will go here:
       # resources :houses
       # resources :wiki_entries

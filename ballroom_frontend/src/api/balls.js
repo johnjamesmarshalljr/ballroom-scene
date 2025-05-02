@@ -17,9 +17,24 @@ export function createBall(data) {
 }
 
 export function createCategory(ballId, data) {
-  return fetch(`${API_BASE}/balls/${ballId}/categories`, {
+  const endpoint = ballId ? `${API_BASE}/balls/${ballId}/categories` : `${API_BASE}/categories`;
+
+  // Remove 'kind' from the data object
+  const { kind, ...filteredData } = data;
+
+  console.log("Sending request to:", endpoint);
+  console.log("Request payload:", filteredData);
+
+  return fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ category: data }),
+    body: JSON.stringify({ category: filteredData }),
+  }).then(handleResponse);
+}
+
+export function getBall(ballId) {
+  return fetch(`${API_BASE}/balls/${ballId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
   }).then(handleResponse);
 }

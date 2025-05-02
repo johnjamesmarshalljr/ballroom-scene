@@ -1,4 +1,3 @@
 class CategorySerializer < ActiveModel::Serializer
-  attributes :id, :kind, :title, :description
-  belongs_to :ball
+  attributes :id, :category_type, :title, :description, :ball_id
 end

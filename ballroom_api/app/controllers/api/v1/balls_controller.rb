@@ -19,6 +19,9 @@ module Api
       def create
         ball = Ball.new(ball_params)
         if ball.save
+          if params[:category_ids]
+            ball.associate_categories(params[:category_ids])
+          end
           render json: ball, serializer: BallSerializer, status: :created
         else
           render json: { errors: ball.errors.full_messages }, status: :unprocessable_entity
@@ -47,7 +50,7 @@ module Api
       end
 
       def ball_params
-        params.require(:ball).permit(:name, :date, :location, :theme, :description)
+        params.require(:ball).permit(:name, :date, :location, :theme, :description, categories_attributes: [:kind, :title, :description])
       end
     end
   end

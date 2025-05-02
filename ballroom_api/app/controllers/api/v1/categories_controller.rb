@@ -2,7 +2,7 @@
 module Api
   module V1
     class CategoriesController < ApplicationController
-      before_action :set_ball
+      before_action :set_ball, only: %i[index update destroy]
       before_action :set_category, only: %i[update destroy]
 
       # GET /api/v1/balls/:ball_id/categories
@@ -13,10 +13,18 @@ module Api
 
       # POST /api/v1/balls/:ball_id/categories
       def create
-        category = @ball.categories.new(category_params)
+        if params[:ball_id]
+          @ball = Ball.find(params[:ball_id])
+          category = @ball.categories.new(category_params)
+        else
+          category = Category.new(category_params)
+        end
+
         if category.save
           render json: category, serializer: CategorySerializer, status: :created
         else
+          Rails.logger.error("Category creation failed: ")
+          Rails.logger.error(category.errors.full_messages)
           render json: { errors: category.errors.full_messages }, status: :unprocessable_entity
         end
       end
@@ -47,7 +55,7 @@ module Api
       end
 
       def category_params
-        params.require(:category).permit(:kind, :title, :description)
+        params.require(:category).permit(:title, :description, :category_type, :ball_id)
       end
     end
   end

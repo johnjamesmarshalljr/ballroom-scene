@@ -3,7 +3,7 @@ import { createBall, createCategory } from "../../api/balls"; // Import createCa
 
 function BallOrganizerPage({ onBack }) {
   const [categories, setCategories] = useState([
-    { type: "performance", title: "", description: "" },
+    { category_type: "performance", title: "", description: "" },
   ]);
   const [ballName, setBallName] = useState("");
   const [ballDescription, setBallDescription] = useState("");
@@ -11,15 +11,31 @@ function BallOrganizerPage({ onBack }) {
 
   const handleChange = (index, field, value) => {
     const updated = [...categories];
-    updated[index][field] = value;
+    updated[index][field === "type" ? "category_type" : field] = value;
+    console.log(`Updating field '${field}' for category at index ${index} with value:`, value);
+    console.log('Updated categories state:', updated);
     setCategories(updated);
   };
 
   const addCategory = () => {
     setCategories([
       ...categories,
-      { type: "performance", title: "", description: "" },
+      { category_type: "", title: "", description: "" }, // Add a blank category object
     ]);
+  };
+
+  const saveCategory = async (index) => {
+    try {
+      const categoryData = { ...categories[index] };
+      console.log('Payload being sent to backend:', categoryData);
+      const savedCategory = await createCategory(null, categoryData);
+      const updatedCategories = [...categories];
+      updatedCategories[index] = { ...categoryData, id: savedCategory.id };
+      setCategories(updatedCategories);
+    } catch (error) {
+      console.error("Failed to save category:", error);
+      alert("Failed to save category. Please try again.");
+    }
   };
 
   const saveBall = async () => {
@@ -27,26 +43,15 @@ function BallOrganizerPage({ onBack }) {
       const ballData = {
         name: ballName,
         description: ballDescription,
-        categories,
+        category_ids: categories.map((cat) => cat.id), // Include saved category IDs
       };
       const savedBall = await createBall(ballData);
-      setBallId(savedBall.id); // Set the ballId after saving the ball
+      setBallId(savedBall.id);
       alert("Ball saved successfully!");
-      onBack(); 
+      onBack();
     } catch (error) {
       console.error("Failed to save ball:", error);
       alert("Failed to save ball. Please try again.");
-    }
-  };
-
-  const saveCategory = async (index) => {
-    try {
-      const categoryData = categories[index];
-      await createCategory(ballId, categoryData);
-      alert("Category saved successfully!");
-    } catch (error) {
-      console.error("Failed to save category:", error);
-      alert("Failed to save category. Please try again.");
     }
   };
 
@@ -93,74 +98,82 @@ function BallOrganizerPage({ onBack }) {
       {/* Categories Form */}
       <div className="space-y-4">
         {categories.map((cat, idx) => (
-          <div
-            key={idx}
-            className="bg-white p-6 rounded-lg shadow-md space-y-4"
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category Type
-              </label>
-              <select
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
-                value={cat.type}
-                onChange={(e) => handleChange(idx, "type", e.target.value)}
-              >
-                <option value="performance">Performance</option>
-                <option value="runway">Runway</option>
-                <option value="realness">Realness</option>
-                <option value="fashion">Fashion</option>
-              </select>
-            </div>
+          <div key={idx} className="bg-white p-6 rounded-lg shadow-md space-y-4">
+            {cat.id ? (
+              <>
+                <p className="text-lg font-semibold">{cat.title}</p>
+                <p className="text-sm text-gray-600">{cat.description}</p>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category Type
+                  </label>
+                  <select
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+                    value={cat.category_type}
+                    onChange={(e) => handleChange(idx, "category_type", e.target.value)}
+                  >
+                    <option value="">Select a type</option>
+                    <option value="performance">Performance</option>
+                    <option value="runway">Runway</option>
+                    <option value="realness">Realness</option>
+                    <option value="fashion">Fashion</option>
+                  </select>
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category Title
-              </label>
-              <input
-                type="text"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="Enter title"
-                value={cat.title}
-                onChange={(e) => handleChange(idx, "title", e.target.value)}
-              />
-            </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category Title
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+                    placeholder="Enter title"
+                    value={cat.title}
+                    onChange={(e) => handleChange(idx, "title", e.target.value)}
+                  />
+                </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                className="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="Describe this category"
-                value={cat.description}
-                onChange={(e) =>
-                  handleChange(idx, "description", e.target.value)
-                }
-              />
-            </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    className="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+                    placeholder="Describe this category"
+                    value={cat.description}
+                    onChange={(e) => handleChange(idx, "description", e.target.value)}
+                  />
+                </div>
 
-            {/* Save Category Button */}
-            <div className="flex justify-end">
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition"
-                onClick={() => saveCategory(idx)}
-              >
-                Save Category
-              </button>
-            </div>
+                <div className="flex justify-end">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition"
+                    onClick={() => saveCategory(idx)}
+                  >
+                    Save Category
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ))}
+
+        {/* Always show the 'Add Another Category' button */}
+        <div className="flex justify-start mt-4">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition"
+            onClick={addCategory}
+          >
+            + Add Another Category
+          </button>
+        </div>
       </div>
 
       {/* Actions */}
       <div className="flex justify-between items-center">
-        <button
-          className="bg-accent text-white px-4 py-2 rounded hover:bg-opacity-90 transition"
-          onClick={addCategory}
-        >
-          + Add Another Category
-        </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition"
           onClick={saveBall}

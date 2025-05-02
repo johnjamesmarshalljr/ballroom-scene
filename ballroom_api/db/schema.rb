@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_01_200312) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_221500) do
   create_table "balls", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -18,15 +18,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_01_200312) do
     t.string "theme"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.integer "ball_id", null: false
-    t.string "kind"
+    t.integer "ball_id"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category_type"
     t.index ["ball_id"], name: "index_categories_on_ball_id"
   end
 
