@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/layout/NavBar";
 import HomePage from "./components/pages/HomePage";
 import ForumPage from "./components/pages/ForumPage";
@@ -8,35 +8,25 @@ import ProfilePage from "./components/pages/ProfilePage";
 import MusicPage from "./components/pages/MusicPage";
 import KikipediaPage from "./components/pages/KikipediaPage";
 import BallDetailsPage from "./components/pages/BallDetailsPage";
+import BallEditPage from "./components/pages/BallEditPage";
 
 function App() {
-  const [view, setView] = useState("home");
-
-  const renderPage = () => {
-    switch (view) {
-      case "forum":
-        return <ForumPage onBack={() => setView("home")} />;
-      case "ballOrganizer":
-        return <BallOrganizerPage onBack={() => setView("home")} />;
-      case "houses":
-        return <HousesPage onBack={() => setView("home")} />;
-      case "profile":
-        return <ProfilePage onBack={() => setView("home")} />;
-      case "music":
-        return <MusicPage onBack={() => setView("home")} />;
-      case "kikipedia":
-        return <KikipediaPage onBack={() => setView("home")} />;
-      case "ballDetails":
-        return <BallDetailsPage onBack={() => setView("home")} />;
-      default:
-        return <HomePage setView={setView} />;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBar setView={setView} />
-      <main className="pt-20 p-4">{renderPage()}</main>
+      <NavBar />
+      <main className="pt-20 p-4">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/ball-organizer" element={<BallOrganizerPage />} />
+          <Route path="/houses" element={<HousesPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/music" element={<MusicPage />} />
+          <Route path="/kikipedia" element={<KikipediaPage />} />
+          <Route path="/ball-details" element={<BallDetailsPage />} />
+          <Route path="/edit-ball/:id" element={<BallEditPage />} />
+        </Routes>
+      </main>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 const API_BASE = "/api/v1";
 
 async function handleResponse(res) {
+  if (res.status === 201) {
+    return res.json(); // Handle 201 Created responses properly
+  }
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`API ${res.status}: ${text}`);
@@ -35,6 +38,20 @@ export function createCategory(ballId, data) {
 export function getBall(ballId) {
   return fetch(`${API_BASE}/balls/${ballId}`, {
     method: "GET",
+    headers: { "Content-Type": "application/json" },
+  }).then(handleResponse);
+}
+
+export function getBalls() {
+  return fetch(`${API_BASE}/balls`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  }).then(handleResponse);
+}
+
+export function deleteBall(ballId) {
+  return fetch(`${API_BASE}/balls/${ballId}`, {
+    method: "DELETE",
     headers: { "Content-Type": "application/json" },
   }).then(handleResponse);
 }

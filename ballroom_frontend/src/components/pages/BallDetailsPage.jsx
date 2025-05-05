@@ -31,7 +31,6 @@ function BallDetailsPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-6 space-y-6">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{ball.name}</h1>
         <button
@@ -42,7 +41,6 @@ function BallDetailsPage() {
         </button>
       </div>
 
-      {/* Details Card */}
       <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
         <p>
           <span className="font-medium">Date:</span> {ball.date}

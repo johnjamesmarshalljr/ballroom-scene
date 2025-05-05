@@ -8,6 +8,9 @@ function BallOrganizerPage({ onBack }) {
   const [ballName, setBallName] = useState("");
   const [ballDescription, setBallDescription] = useState("");
   const [ballId, setBallId] = useState(null); // Add state for ballId
+  const [ballDate, setBallDate] = useState(""); // New state for date
+  const [ballLocation, setBallLocation] = useState(""); // New state for location
+  const [ballTheme, setBallTheme] = useState(""); // New state for theme
 
   const handleChange = (index, field, value) => {
     const updated = [...categories];
@@ -43,15 +46,20 @@ function BallOrganizerPage({ onBack }) {
       const ballData = {
         name: ballName,
         description: ballDescription,
+        date: ballDate, // Include date
+        location: ballLocation, // Include location
+        theme: ballTheme, // Include theme
         category_ids: categories.map((cat) => cat.id), // Include saved category IDs
       };
       const savedBall = await createBall(ballData);
       setBallId(savedBall.id);
       alert("Ball saved successfully!");
-      onBack();
+      window.location.href = "/"; // Redirect to Home Page
     } catch (error) {
       console.error("Failed to save ball:", error);
-      alert("Failed to save ball. Please try again.");
+      if (!error.message.includes("201")) { // Avoid showing failure alert if status is 201
+        alert("Failed to save ball. Please try again.");
+      }
     }
   };
 
@@ -92,6 +100,47 @@ function BallOrganizerPage({ onBack }) {
           placeholder="Enter ball description"
           value={ballDescription}
           onChange={(e) => setBallDescription(e.target.value)}
+        />
+      </div>
+
+      {/* Ball Date */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Date
+        </label>
+        <input
+          type="date"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          value={ballDate}
+          onChange={(e) => setBallDate(e.target.value)}
+        />
+      </div>
+
+      {/* Ball Location */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Location
+        </label>
+        <input
+          type="text"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          placeholder="Enter location"
+          value={ballLocation}
+          onChange={(e) => setBallLocation(e.target.value)}
+        />
+      </div>
+
+      {/* Ball Theme */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Theme
+        </label>
+        <input
+          type="text"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          placeholder="Enter theme"
+          value={ballTheme}
+          onChange={(e) => setBallTheme(e.target.value)}
         />
       </div>
 
