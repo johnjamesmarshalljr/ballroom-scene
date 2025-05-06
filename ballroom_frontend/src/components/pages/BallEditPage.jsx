@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getBall, createBall } from "../../api/balls";
 
 function BallEditPage({ onBack }) {
-  const { ballId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [ball, setBall] = useState({ name: "", date: "", location: "", theme: "" });
   const [hasError, setHasError] = useState(false);
@@ -11,8 +11,8 @@ function BallEditPage({ onBack }) {
   useEffect(() => {
     async function fetchBall() {
       try {
-        const fetchedBall = await getBall(ballId);
-        setBall(fetchedBall);
+        const fetchedBall = await getBall(id);
+        setBall({ ...fetchedBall, flyer: null });
       } catch (error) {
         console.error("Failed to fetch ball details:", error);
         if (!hasError) {
@@ -24,7 +24,7 @@ function BallEditPage({ onBack }) {
     }
 
     fetchBall();
-  }, [ballId, hasError]);
+  }, [id, hasError]);
 
   const handleChange = (field, value) => {
     setBall((prevBall) => ({ ...prevBall, [field]: value }));
@@ -80,6 +80,16 @@ function BallEditPage({ onBack }) {
           className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
           value={ball.theme}
           onChange={(e) => handleChange("theme", e.target.value)}
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Flyer</label>
+        <input
+          type="file"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          style={{ display: 'block', marginTop: '1rem', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff' }}
+          onChange={(e) => handleChange("flyer", e.target.files[0])}
         />
       </div>
 

@@ -12,10 +12,18 @@ async function handleResponse(res) {
 }
 
 export function createBall(data) {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    if (key === "flyer" && data[key]) {
+      formData.append("ball[flyer]", data[key]);
+    } else {
+      formData.append(`ball[${key}]`, data[key]);
+    }
+  });
+
   return fetch(`${API_BASE}/balls`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ball: data }),
+    body: formData,
   }).then(handleResponse);
 }
 

@@ -22,6 +22,7 @@ module Api
           if params[:category_ids]
             ball.associate_categories(params[:category_ids])
           end
+          ball.flyer.attach(params[:ball][:flyer]) if params[:ball][:flyer].present?
           render json: ball, serializer: BallSerializer, status: :created
         else
           render json: { errors: ball.errors.full_messages }, status: :unprocessable_entity
@@ -50,7 +51,7 @@ module Api
       end
 
       def ball_params
-        params.require(:ball).permit(:name, :date, :location, :theme, :description, categories_attributes: [:kind, :title, :description])
+        params.require(:ball).permit(:name, :date, :location, :theme, :description, :flyer, categories_attributes: [:kind, :title, :description])
       end
     end
   end

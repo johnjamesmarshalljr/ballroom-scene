@@ -11,6 +11,7 @@ function BallOrganizerPage({ onBack }) {
   const [ballDate, setBallDate] = useState(""); // New state for date
   const [ballLocation, setBallLocation] = useState(""); // New state for location
   const [ballTheme, setBallTheme] = useState(""); // New state for theme
+  const [ballFlyer, setBallFlyer] = useState(null); // New state for flyer
 
   const handleChange = (index, field, value) => {
     const updated = [...categories];
@@ -141,6 +142,16 @@ function BallOrganizerPage({ onBack }) {
           placeholder="Enter theme"
           value={ballTheme}
           onChange={(e) => setBallTheme(e.target.value)}
+        />
+      </div>
+
+      {/* Ball Flyer */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Flyer</label>
+        <input
+          type="file"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+          onChange={(e) => setBallFlyer(e.target.files[0])}
         />
       </div>
 

@@ -48,6 +48,13 @@ function HomePage() {
               <p className="text-gray-600">Date: {ball.date || "Not specified"}</p>
               <p className="text-gray-600">Location: {ball.location || "Not specified"}</p>
               <p className="text-gray-600">Theme: {ball.theme || "Not specified"}</p>
+              {ball.flyer_url && (
+                <img
+                  src={ball.flyer_url}
+                  alt={`${ball.name} flyer`}
+                  className="w-full h-auto rounded mb-2"
+                />
+              )}
               <button
                 className="text-red-500 hover:underline mt-2"
                 onClick={() => handleDelete(ball.id)}
