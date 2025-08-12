@@ -33,6 +33,12 @@ function NavBar() {
         >
           Profile
         </button>
+        <button
+          className="bg-accent text-primary px-3 py-1 rounded hover:bg-primary hover:text-surface border border-accent ml-2"
+          onClick={() => navigate("/profile/create")}
+        >
+          Create Profile
+        </button>
       </div>
     </nav>
   );

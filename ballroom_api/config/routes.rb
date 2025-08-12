@@ -11,8 +11,11 @@ Rails.application.routes.draw do
 
       resources :categories, only: [:create] # Independent category creation
 
+      resources :users, only: [:show, :create, :update]
+
+      resources :houses, only: [:index, :show, :create, :update, :destroy]
+
     #  other resources (houses, kikipedia entries, users, etc.), will go here:
-      # resources :houses
       # resources :wiki_entries
 
     end
@@ -20,4 +23,8 @@ Rails.application.routes.draw do
 
   # Serve React frontend (if using Rails for static hosting):
   # get '*path', to: 'static#frontend', constraints: ->(req) { !req.xhr? && req.format.html? }
+
+  # Google OAuth routes for OmniAuth
+  get '/auth/:provider/callback', to: 'sessions#omniauth'
+  get '/auth/failure', to: redirect('/')
 end
